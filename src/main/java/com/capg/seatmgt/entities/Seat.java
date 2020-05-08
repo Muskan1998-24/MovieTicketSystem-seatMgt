@@ -14,35 +14,41 @@ public class Seat
 {
     @Id
     @GeneratedValue
-	
-    private int seatId;
+	private int seatId;
+    private double seatPrice;
+    private SeatStatus seatStatus;
+    
     public int getSeatId() 
     {
     	return seatId;
     }
-    public void setSeatId() 
+    
+    public void setSeatId(int seatId) 
     {
     	this.seatId=seatId;
     }
     
-    public enum seatStatus
-    {
-    	SEAT_AVAILABLE,
-    	SEAT_UNAVAILABLE;
-    }
     
-    private double seatPrice;
     public double getSeatPrice() 
     {
     	return seatPrice;
     }
-    public void setSeatPrice() 
+    
+    public void setSeatPrice(double seatPrice) 
     {
     	this.seatPrice=seatPrice;
     }
 	
-  
+    
+    public SeatStatus getSeatStatus() {
+    	return seatStatus;
+    }
 
+    public void setSeatStatus(SeatStatus seatStatus) {
+    	this.seatStatus = seatStatus;
+    }
+
+    
     @Override
     public boolean equals(Object o) 
     {
