@@ -28,11 +28,11 @@ public class SeatController
       @Autowired
       private ISeatService service;
 
-	  @PostMapping("add")
+	  @PostMapping("/add")
 	  public ResponseEntity<Seat> addSeat(@RequestBody SeatDetailsDto dto) 
 	      {
 		    Seat seat = convert(dto);
-		    seat = service.save(seat);
+		    seat = service.addSeat(seat);
 	        ResponseEntity<Seat> response = new ResponseEntity<>(seat, HttpStatus.OK);
 	        return response;
           }
@@ -40,13 +40,14 @@ public class SeatController
 	        Seat convert(SeatDetailsDto dto)
 	      {
 	        Seat seat= new Seat();
-	        seat.setSeatStatus(dto.getSeatStatus());
+	        seat.setSeatId(dto.getSeatId());
 	        seat.setSeatPrice(dto.getSeatPrice());
+	        seat.setSeatStatus(SeatStatus.AVAILABLE);
 	        return seat;
 	      }
 
 
-       @GetMapping("/")
+       
        public ResponseEntity<List<Seat>> fetchAll() 
           {
             List<Seat> seats = service.fetchAllSeats();
@@ -67,24 +68,26 @@ public class SeatController
 	        return response;
 	      }
        
-       
-       @PutMapping("/book")
-       public ResponseEntity bookSeat(@RequestBody Integer[]seatId) 
-          {
-             List<Integer>seatIdList=Arrays.asList(seatId);
-             service.bookSeat(seatIdList);
-             ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
-             return responseEntity;
-          }
+       @PutMapping("/blockseat/{id}")
+       public ResponseEntity<Seat> blockSeat(@PathVariable("id") int seatId) {
+           Seat seat = service.blockSeat(seatId);
+           ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
+           return response;
+       }
 
-       
-       @DeleteMapping("/cancel/{id}")
-   	   public ResponseEntity<String> cancelSeat(@PathVariable("id") int seatId)
-          {
-   		     String msg = service.cancelSeat(seatId);
-   		     ResponseEntity<String> response = new ResponseEntity<String>(msg,HttpStatus.OK);
-   		     return response;
-   	      }
-   	 
+       @PutMapping("/bookseat/{id}")
+       public ResponseEntity<Seat> bookSeat(@PathVariable("id") int id) {
+           Seat seat = service.bookSeat(id);
+           ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
+           return response;
+       }
+
+       @PutMapping("/cancelseat/{id}")
+       public ResponseEntity<Seat> cancelSeat(@PathVariable("id") int id) {
+           Seat seat = service.cancelSeat(id);
+           ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
+           return response;
+       }
+
     
 }

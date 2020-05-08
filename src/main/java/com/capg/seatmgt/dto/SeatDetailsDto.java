@@ -30,7 +30,7 @@ public class SeatDetailsDto
 	    }
 
         
-     public SeatStatus getSeatStatus() {
+      public SeatStatus getSeatStatus() {
 	    	return seatStatus;
 	    }
 

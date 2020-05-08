@@ -26,14 +26,7 @@ public class SeatServiceImpl implements ISeatService
     @Autowired
     private SeatDao seatDao;
    
-    /*.....................................SAVE SEAT................................*/
-    
-    @Override
-    public Seat save(Seat seat)
-    {
-       seat=seatDao.save(seat);
-       return seat;
-    }
+  
     
     
     /*.....................................FETCH ALL SEATS................................*/
@@ -67,7 +60,8 @@ public class SeatServiceImpl implements ISeatService
 	
 	 /*.....................................FIND BY ID................................*/
 	@Override
-    public Seat findById(int seatId) {
+    public Seat findById(int seatId) 
+	{
         Optional<Seat> optional = seatDao.findById(seatId);
         if (optional.isPresent()) {
             Seat seat = optional.get();
@@ -79,62 +73,45 @@ public class SeatServiceImpl implements ISeatService
 	
 	  /*.....................................BOOK SEAT................................*/
     
+	 @Override
+	 public Seat bookSeat(int seatId) 
+	 {
+		 Seat seat=findById(seatId);
+	     seat.getSeatId();
+	     seat.setSeatStatus(SeatStatus.BOOKED);
+	     seatDao.save(seat);
+	     return seat;
+	  }
 	
-	@Override
-	public List<Seat> bookSeat(List<Integer> seatId)
-	{
-		 List<Seat> seatList=new ArrayList<>();
-		 for(int id:seatId) 
-		 {
-		    if(seatDao.existsById(id)) 
-		     {
-			 Seat bookseat= seatDao.getOne(id);
-			    if(bookseat.getSeatStatus()==SeatStatus.AVAILABLE)
-			    {
-				bookseat.setSeatStatus(SeatStatus.BOOKED);
-				seatList.add(bookseat);
-			    }
-		     }
-		 }
-		 seatList=seatDao.saveAll(seatList);
-		return seatList;
-	}
 
 	
 	  /*.....................................BLOCK SEAT................................*/
     
+	 @Override
+	 public Seat blockSeat(int seatId) 
+	 {
+		 Seat seat=findById(seatId);
+	     seat.getSeatId();
+	     seat.setSeatStatus(SeatStatus.BLOCKED);
+	     seatDao.save(seat);
+	     return seat;
+	  }
 	
-	@Override
-	public List<Seat> blockSeat(List<Integer> seatId)
-	{
-		 List<Seat> seatList=new ArrayList<>();
-		 for(int id:seatId) 
-		 {
-		    if(seatDao.existsById(id)) 
-		     {
-			 Seat blockseat= seatDao.getOne(id);
-			    if(blockseat.getSeatStatus()==SeatStatus.AVAILABLE)
-			    {
-				blockseat.setSeatStatus(SeatStatus.BLOCKED);
-				seatList.add(blockseat);
-			    }
-		     }
-		 }
-		 seatList=seatDao.saveAll(seatList);
-		return seatList;
-	}
+
 
 	
 	  /*.....................................CANCEL SEAT................................*/
     
 	
-	@Override
-	public String cancelSeat(int seatId) {
-		Seat seat = findById(seatId);
-		seat.getSeatId();
-		if(seat==null) throw new SeatNotFoundException("Seat Not Booked");
-		seat.setSeatStatus(SeatStatus.CANCELLED);
-		return "Seat Cancelled";
+	 @Override
+	 public Seat cancelSeat(int seatId)
+	 {
+		  Seat seat = findById(seatId);
+		  seat.getSeatId();
+		  if(seat==null) throw new SeatNotFoundException("Seat Not Booked");
+		  seat.setSeatStatus(SeatStatus.AVAILABLE);
+		  seatDao.save(seat);
+		  return seat;
 	}
 	
 	

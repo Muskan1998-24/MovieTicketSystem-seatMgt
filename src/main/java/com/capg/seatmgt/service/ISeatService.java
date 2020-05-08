@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface ISeatService 
 {
-	Seat save(Seat seat);  
 	
 	List<Seat> fetchAllSeats();
 	
@@ -19,10 +18,10 @@ public interface ISeatService
     
     Seat findById(int seatId);
     
-    List<Seat> bookSeat(List<Integer> seatId);
+    Seat bookSeat(int seatId);
+    
+    Seat blockSeat(int seatId); 
 	
-    List<Seat> blockSeat(List<Integer> seatId);
-	
-    String cancelSeat(int seatId);
+    Seat cancelSeat(int seatId);
 
 }
