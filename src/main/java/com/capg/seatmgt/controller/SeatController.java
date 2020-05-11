@@ -79,8 +79,9 @@ public class SeatController
        
        //block seat by id
        
-       @PutMapping("/blockseat/{id}")
-       public ResponseEntity<Seat> blockSeat(@PathVariable("id") int seatId) {
+       @PutMapping("/block/{id}")
+       public ResponseEntity<Seat> blockSeat(@PathVariable("id") int seatId)
+       {
            Seat seat = service.blockSeat(seatId);
            ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
            return response;
@@ -88,9 +89,10 @@ public class SeatController
 
        //book seat by id
        
-       @PutMapping("/bookseat/{id}")
-       public ResponseEntity<Seat> bookSeat(@PathVariable("id") int id) {
-           Seat seat = service.bookSeat(id);
+       @PutMapping("/book/{id}")
+       public ResponseEntity<Seat> bookSeat(@PathVariable("id") int seatId) 
+       {
+           Seat seat = service.bookSeat(seatId);
            ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
            return response;
        }
@@ -98,9 +100,10 @@ public class SeatController
        
        //cancel seat by id
        
-       @PutMapping("/cancelseat/{id}")
-       public ResponseEntity<Seat> cancelSeat(@PathVariable("id") int id) {
-           Seat seat = service.cancelSeat(id);
+       @PutMapping("/cancel/{id}")
+       public ResponseEntity<Seat> cancelSeat(@PathVariable("id") int seatId)
+       {
+           Seat seat = service.cancelSeat(seatId);
            ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
            return response;
        }
@@ -120,7 +123,8 @@ public class SeatController
        
        
        @ExceptionHandler(ConstraintViolationException.class)
-       public ResponseEntity<String> handleConstraintViolate(ConstraintViolationException ex) {
+       public ResponseEntity<String> handleConstraintViolate(ConstraintViolationException ex) 
+       {
            Log.error("constraint violation", ex);
            String msg = ex.getMessage();
            ResponseEntity<String> response = new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);

@@ -20,18 +20,7 @@ public class Seat
     
     
     
-    /*public Seat() 
-    {
-    	
-    }
-    
-    public Seat( double seatPrice, SeatStatus seatStatus) 
-    {
-    	this.seatPrice=seatPrice;
-    	this.seatStatus = seatStatus;
-    }
-    */
-    
+   
     
     public int getSeatId() 
     {
