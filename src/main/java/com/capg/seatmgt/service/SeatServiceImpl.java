@@ -6,8 +6,9 @@ import com.capg.seatmgt.dao.SeatDao;
 import com.capg.seatmgt.entities.Seat;
 import com.capg.seatmgt.entities.SeatStatus;
 import com.capg.seatmgt.exceptions.IncorrectSeatIdException;
-import com.capg.seatmgt.exceptions.SeatAlreadyExistException;
+
 import com.capg.seatmgt.exceptions.SeatNotFoundException;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,18 +43,12 @@ public class SeatServiceImpl implements ISeatService
 
     /*.....................................ADD SEAT................................*/
     
-	@Override
-	public Seat addSeat(Seat seat)
-	{
-		if (seatDao.existsById(seat.getSeatId())) 
-		{
-			throw new SeatAlreadyExistException("Seat already exists");
-		}
-		seat=seatDao.save(seat);
-		return seat;
-		
-	}
 	
+	@Override
+    public Seat saveSeat(Seat seat){
+		seat=seatDao.save(seat);
+        return seat;
+    }
 	
 	
 	

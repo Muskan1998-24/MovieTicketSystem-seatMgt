@@ -14,7 +14,7 @@ public interface ISeatService
 	
 	List<Seat> fetchAllSeats();
 	
-    Seat addSeat (Seat seat);
+    Seat saveSeat(Seat seat);
     
     Seat findById(int seatId);
     

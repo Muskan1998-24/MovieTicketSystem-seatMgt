@@ -1,11 +1,14 @@
 package com.capg.seatmgt.controller;
 
 
-import com.capg.seatmgt.dto.SeatDetailsDto;
+import com.capg.seatmgt.dto.SeatDetailsDto;import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.capg.seatmgt.entities.Seat;
 import com.capg.seatmgt.entities.SeatStatus;
-import com.capg.seatmgt.service.ISeatService;
+import com.capg.seatmgt.exceptions.SeatNotFoundException;
 
+import javax.validation.ConstraintViolationException;
+import com.capg.seatmgt.service.ISeatService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,27 +30,31 @@ public class SeatController
 
       @Autowired
       private ISeatService service;
+      
+      private static final Logger Log = LoggerFactory.getLogger(SeatController.class);
 
 	  @PostMapping("/add")
 	  public ResponseEntity<Seat> addSeat(@RequestBody SeatDetailsDto dto) 
 	      {
 		    Seat seat = convert(dto);
-		    seat = service.addSeat(seat);
+		    service.saveSeat(seat);
 	        ResponseEntity<Seat> response = new ResponseEntity<>(seat, HttpStatus.OK);
 	        return response;
           }
 
-	        Seat convert(SeatDetailsDto dto)
+	  public Seat convert(SeatDetailsDto dto)
 	      {
 	        Seat seat= new Seat();
-	        seat.setSeatId(dto.getSeatId());
 	        seat.setSeatPrice(dto.getSeatPrice());
 	        seat.setSeatStatus(SeatStatus.AVAILABLE);
 	        return seat;
 	      }
 
+	   
 
-       
+       //fetch all seats
+	  
+       @GetMapping
        public ResponseEntity<List<Seat>> fetchAll() 
           {
             List<Seat> seats = service.fetchAllSeats();
@@ -55,6 +62,8 @@ public class SeatController
             return response;
           }
 
+       //find seat by id
+       
        @GetMapping("find/{id}")
 	   public ResponseEntity<Seat> findById(@PathVariable("id") int seatId)
 	      {
@@ -68,6 +77,8 @@ public class SeatController
 	        return response;
 	      }
        
+       //block seat by id
+       
        @PutMapping("/blockseat/{id}")
        public ResponseEntity<Seat> blockSeat(@PathVariable("id") int seatId) {
            Seat seat = service.blockSeat(seatId);
@@ -75,6 +86,8 @@ public class SeatController
            return response;
        }
 
+       //book seat by id
+       
        @PutMapping("/bookseat/{id}")
        public ResponseEntity<Seat> bookSeat(@PathVariable("id") int id) {
            Seat seat = service.bookSeat(id);
@@ -82,12 +95,50 @@ public class SeatController
            return response;
        }
 
+       
+       //cancel seat by id
+       
        @PutMapping("/cancelseat/{id}")
        public ResponseEntity<Seat> cancelSeat(@PathVariable("id") int id) {
            Seat seat = service.cancelSeat(id);
            ResponseEntity<Seat> response = new ResponseEntity<Seat>(seat, HttpStatus.OK);
            return response;
        }
+       
+       //SeatNotFoundException
+       
+       
+       @ExceptionHandler(SeatNotFoundException.class)
+       public ResponseEntity<String>handleEmployeeNotFound(SeatNotFoundException ex){
+           Log.error("Seat not found exception",ex);
+           String msg=ex.getMessage();
+           ResponseEntity<String>response=new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
+           return response;
+       }
 
+       // ConstraintViolationException 
+       
+       
+       @ExceptionHandler(ConstraintViolationException.class)
+       public ResponseEntity<String> handleConstraintViolate(ConstraintViolationException ex) {
+           Log.error("constraint violation", ex);
+           String msg = ex.getMessage();
+           ResponseEntity<String> response = new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+           return response;
+       }
+
+       
+       //Blanket Exception Handler
+       
+        
+       @ExceptionHandler(Throwable.class)
+       public ResponseEntity<String> handleAll(Throwable ex) 
+       {
+           Log.error("Something went wrong", ex);
+           String msg = ex.getMessage();
+           ResponseEntity<String> response = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+           return response;
+       }
+   
     
 }

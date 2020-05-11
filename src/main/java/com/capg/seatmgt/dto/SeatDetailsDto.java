@@ -8,23 +8,25 @@ public class SeatDetailsDto
 	 private double seatPrice;
 	 private SeatStatus seatStatus;
 	    
+
+	    
 	 public int getSeatId() 
 	    {
 	    	return seatId;
 	    }
 	    
-	 public void setSeatId() 
+	 public void setSeatId(int seatId) 
 	    {
 	    	this.seatId=seatId;
-	    }
-	    
-	  
+	    } 
+	 
+	 
 	 public double getSeatPrice() 
 	    {
 	    	return seatPrice;
 	    }
 	 
-     public void setSeatPrice(double Price) 
+     public void setSeatPrice(double seatPrice) 
 	    {
 	    	this.seatPrice=seatPrice;
 	    }
